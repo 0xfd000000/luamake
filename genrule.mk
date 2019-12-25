@@ -30,14 +30,14 @@ $(info $(lua `tostring(Rule {"@echo ola"}) ))
 define simple_rule
 
 local r = Rule {
-    "@touch $$@"
+    "@echo Hello from recipe for $$@"
 }
 eval(tostring(r))
 return r.name
 
 endef
 
-simple = $(lua $(simple_rule))
+simple := $(lua $(simple_rule))
 $(info name of simple rule: $(simple))
 test.genrule: $(simple)
 
@@ -49,7 +49,7 @@ local r = Rule {
 	CC="clang",
 	CXX="clang++",
 	{
-		"$$(say hello, this is a synthesized rule)",
+		"$$(say This is a synthesized rule)",
 		"$$(show CC,CXX)",
 		"$$(say my target is: $$@)",
 	}
@@ -68,3 +68,4 @@ $(info generated: $(gens))
 generated: $(gens)
 	$(say $@: $^)
 
+test.genrule: generated
